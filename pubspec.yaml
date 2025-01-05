@@ -1,0 +1,91 @@
+name: ezycourse
+description: "A new Flutter project."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+   sdk: '>=3.0.0 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: 1.0.8
+  # State Management
+  get: 4.6.6
+
+   # Networking
+  dio: 5.7.0
+  dio_cache_interceptor: 3.5.0
+
+  # Local Storage
+  shared_preferences: 2.3.5
+  hive: 2.2.3
+  hive_flutter: 1.1.0
+
+  # Misc
+  flutter_svg: 2.0.16
+  cached_network_image: 3.4.1
+  flutter_screenutil: 5.9.3
+  fluttertoast: 8.2.10
+  flutter_native_splash: 2.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: 0.14.2
+  flutter_lints: 5.0.0
+  logger: 2.4.0
+  build_runner: 2.4.13   # For code generation
+  hive_generator: 2.0.1 # For Hive type adapters
+
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/icon/
+    - assets/images/
+    - assets/fonts/
+
+
+  fonts:
+    - family: Figtree
+      fonts:
+        - asset: assets/fonts/Figtree-Regular.ttf
+        - asset: assets/fonts/Figtree-SemiBold.ttf
+          weight: 700
+        - asset: assets/fonts/Figtree-Bold.ttf
+          weight: 900
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#115C67"
+  macos:
+    generate: false
+  windows: 
+    generate: false
+  linux: 
+    generate: false
+
+flutter_native_splash:
+  # This package generates native code to customize Flutter's default white native splash screen
+  # with background color and splash image.
+  # Customize the parameters below, and run the following command in the terminal:
+  # flutter pub run flutter_native_splash:create
+  # To restore Flutter's default white splash screen, run the following command in the terminal:
+  # flutter pub run flutter_native_splash:remove
+
+  # color or background_image is the only required parameter.  Use color to set the background
+  # of your splash screen to a solid color.  Use background_image to set the background of your
+  # splash screen to a png image.  This is useful for gradients. The image will be stretch to the
+  # size of the app. Only one parameter can be used, color and background_image cannot both be set.
+  background_image: "assets/images/bg.png"
+  image: assets/icon/icon.png
