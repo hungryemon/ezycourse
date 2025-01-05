@@ -47,14 +47,12 @@ abstract class BaseView<Controller extends BaseController>
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         //Status bar color for android
-        statusBarColor: statusBarColor(context),
-        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-        statusBarIconBrightness:
-            Get.isDarkMode ? Brightness.light : Brightness.dark,
-        systemNavigationBarIconBrightness:
-            Get.isDarkMode ? Brightness.light : Brightness.dark,
-        statusBarBrightness:
-            Get.isDarkMode ? Brightness.dark : Brightness.light,
+        statusBarColor: ColorConstants.transparent,
+        systemNavigationBarColor: ColorConstants.transparent,
+        systemNavigationBarDividerColor: ColorConstants.white,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarBrightness:Brightness.dark ,
       ),
       child: pageScaffold(context),
     );
@@ -94,7 +92,9 @@ abstract class BaseView<Controller extends BaseController>
 
   Widget showErrorSnackBar(String message) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      EzyCourseToast.error(msg: message, );
+      EzyCourseToast.error(
+        msg: message,
+      );
     });
 
     return Container();
@@ -127,9 +127,13 @@ abstract class BaseView<Controller extends BaseController>
   }
 
   Widget _showLoading() {
-    return SizedBox(
-      height: 40,
-      width: 40,
-      child: CircularProgressIndicator(color: ColorConstants.green100, ));
+    return Center(
+      child: SizedBox(
+          height: 40,
+          width: 40,
+          child: CircularProgressIndicator(
+            color: ColorConstants.green100,
+          )),
+    );
   }
 }

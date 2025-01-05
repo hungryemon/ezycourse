@@ -9,37 +9,65 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends BaseController {
+  @override
+  void onInit() {
+    initialize();
+    super.onInit();
+  }
+
+  initialize() {
+    emailController.text = SharedPrefUtil.getEmail();
+    passwordController.text = SharedPrefUtil.getPassword();
+    isRememberMe(SharedPrefUtil.getIsRememberMe());
+  }
+
   final GlobalKey<FormState> userFormKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  final LoginUseCase _loginUseCase = Get.find(tag: (LoginUseCase).toString());  
+  final RxBool isRememberMe = false.obs;
+  final RxBool isLoading = false.obs;
+
+  final LoginUseCase _loginUseCase = Get.find(tag: (LoginUseCase).toString());
 
   void login(
     BuildContext context,
   ) {
     if (userFormKey.currentState!.validate()) {
+      isLoading(true);
       final loginService = _loginUseCase.execute(
         LoginRequest(
             email: emailController.text.trim(),
             password: passwordController.text),
       );
 
-      callDataService(
-        loginService,
-        onSuccess: _handleLoginSuccess,
-      );
+      callDataService(loginService,
+          hideLoader: true, onSuccess: _handleLoginSuccess, onComplete: () {
+        isLoading(false);
+      });
     }
   }
 
   _handleLoginSuccess(LoginResponse res) {
     if (res.token.isNotEmpty) {
       SharedPrefUtil.setBearerToken(res.token);
+      if (SharedPrefUtil.getIsRememberMe()) {
+        SharedPrefUtil.setEmail(emailController.text);
+        SharedPrefUtil.setPassword(passwordController.text);
+      } else {
+        SharedPrefUtil.setEmail('');
+        SharedPrefUtil.setPassword('');
+      }
       EzyCourseToast.success(
         msg: 'Login Success',
       );
       Get.offAllNamed(AppRoutes.feeds);
     }
+  }
+
+  onPressRememberMe(bool value) {
+    isRememberMe(value);
+    SharedPrefUtil.setIsRememberMe(value);
   }
 
   @override

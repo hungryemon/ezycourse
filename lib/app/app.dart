@@ -7,6 +7,7 @@ import 'flavors/build_config.dart';
 import 'flavors/env_config.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
+import 'theme/theme.dart';
 
 class EzyCourseApp extends StatefulWidget {
   const EzyCourseApp({
@@ -38,6 +39,9 @@ class _EzyCourseAppState extends State<EzyCourseApp> {
             initialBinding: InitialBinding(),
             initialRoute: AppRoutes.splash,
             enableLog: true,
+             theme: ThemeConfig.lightTheme,
+            darkTheme: ThemeConfig.darkTheme,
+            themeMode: ThemeMode.light,
             logWriterCallback: (String text, {bool isError = false}) {
               if (BuildConfig.instance.config.shouldCollectLog) {
                 debugPrint("GetxLog: $text");
