@@ -21,6 +21,8 @@ class LoginController extends BaseController {
     isRememberMe(SharedPrefUtil.getIsRememberMe());
   }
 
+  final LoginUseCase _loginUseCase = Get.find(tag: (LoginUseCase).toString());
+
   final GlobalKey<FormState> userFormKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -28,7 +30,7 @@ class LoginController extends BaseController {
   final RxBool isRememberMe = false.obs;
   final RxBool isLoading = false.obs;
 
-  final LoginUseCase _loginUseCase = Get.find(tag: (LoginUseCase).toString());
+  
 
   void login(
     BuildContext context,
@@ -41,14 +43,18 @@ class LoginController extends BaseController {
             password: passwordController.text),
       );
 
-      callDataService(loginService,
-          hideLoader: true, onSuccess: _handleLoginSuccess, onComplete: () {
-        isLoading(false);
-      });
+      callDataService(
+        loginService,
+        hideLoader: true,
+        onSuccess: _handleLoginSuccess,
+        onComplete: () {
+          isLoading(false);
+        },
+      );
     }
   }
 
-  _handleLoginSuccess(LoginResponse res) {
+  _handleLoginSuccess(LoginResponse res) async {
     if (res.token.isNotEmpty) {
       SharedPrefUtil.setBearerToken(res.token);
       if (SharedPrefUtil.getIsRememberMe()) {
@@ -61,13 +67,13 @@ class LoginController extends BaseController {
       EzyCourseToast.success(
         msg: 'Login Success',
       );
-      Get.offAllNamed(AppRoutes.feeds);
+      await Get.offAllNamed(AppRoutes.feeds);
     }
   }
 
-  onPressRememberMe(bool value) {
+  onPressRememberMe(bool value) async {
     isRememberMe(value);
-    SharedPrefUtil.setIsRememberMe(value);
+    await SharedPrefUtil.setIsRememberMe(value);
   }
 
   @override

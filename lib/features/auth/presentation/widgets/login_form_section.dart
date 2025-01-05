@@ -76,26 +76,65 @@ class _LoginFormSectionState extends State<LoginFormSection> {
         .copyWith(color: ColorConstants.white80, fontSize: 19.5);
     return Form(
       key: widget.controller.userFormKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Email Field
-          ...[
-            Text(
-              "Email",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontSize: 17.06, color: ColorConstants.white80),
-            ),
-            SizedBox(
-              height: 7.31.h,
-            ),
-            TextFormField(
-              controller: widget.controller.emailController,
-              decoration: InputDecoration(
-                  hintText: 'Email',
+      child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Email Field
+            ...[
+              Text(
+                "Email",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(fontSize: 17.06, color: ColorConstants.white80),
+              ),
+              SizedBox(
+                height: 7.31.h,
+              ),
+              TextFormField(
+                controller: widget.controller.emailController,
+                decoration: InputDecoration(
+                    hintText: 'Email',
+                    hintStyle:
+                        TextStyle(color: ColorConstants.white.withOpacity(.5)),
+                    filled: true,
+                    fillColor: ColorConstants.white.withOpacity(.1),
+                    focusedBorder: textFieldBorder,
+                    enabledBorder: textFieldBorder,
+                    border: textFieldBorder,
+                    isDense: true),
+                style: textFieldInputStyle,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!GetUtils.isEmail(value)) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
+                },
+              ),
+            ],
+            SizedBox(height: 21.41.h),
+            // Password Field
+            ...[
+              Text(
+                "Password",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(fontSize: 17.06, color: ColorConstants.white80),
+              ),
+              SizedBox(
+                height: 7.31.h,
+              ),
+              TextFormField(
+                controller: widget.controller.passwordController,
+                decoration: InputDecoration(
+                  hintText: 'Password',
                   hintStyle:
                       TextStyle(color: ColorConstants.white.withOpacity(.5)),
                   filled: true,
@@ -103,120 +142,84 @@ class _LoginFormSectionState extends State<LoginFormSection> {
                   focusedBorder: textFieldBorder,
                   enabledBorder: textFieldBorder,
                   border: textFieldBorder,
-                  isDense: true),
-              style: textFieldInputStyle,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your email';
-                }
-                if (!GetUtils.isEmail(value)) {
-                  return 'Please enter a valid email';
-                }
-                return null;
-              },
-            ),
-          ],
-          SizedBox(height: 21.41.h),
-          // Password Field
-          ...[
-            Text(
-              "Password",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontSize: 17.06, color: ColorConstants.white80),
-            ),
-            SizedBox(
-              height: 7.31.h,
-            ),
-            TextFormField(
-              controller: widget.controller.passwordController,
-              decoration: InputDecoration(
-                hintText: 'Password',
-                hintStyle:
-                    TextStyle(color: ColorConstants.white.withOpacity(.5)),
-                filled: true,
-                fillColor: ColorConstants.white.withOpacity(.1),
-                focusedBorder: textFieldBorder,
-                enabledBorder: textFieldBorder,
-                border: textFieldBorder,
-                isDense: true,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscurePassword
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: ColorConstants.white,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
-                  },
-                ),
-              ),
-              style: textFieldInputStyle,
-              obscureText: _obscurePassword,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your password';
-                }
-                if (value.length < 6) {
-                  return 'Password must be at least 6 characters';
-                }
-                return null;
-              },
-            ),
-          ],
-          SizedBox(height: 28.97.h),
-          //Rmember Me
-          Obx(() {
-            widget.controller.isRememberMe.value;
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 16,
-                  width: 16,
-                  child: Checkbox(
-                    visualDensity: VisualDensity.compact,
-                    value: widget.controller.isRememberMe.value,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4.r)),
-                    side: BorderSide(width: .6, color: ColorConstants.white),
-                    activeColor: ColorConstants.indigo100,
-                    checkColor: ColorConstants.white,
-                    onChanged: (value) {
-                      widget.controller.isRememberMe(value);
+                  isDense: true,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: ColorConstants.white,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
                     },
                   ),
                 ),
-                SizedBox(width: 8.w),
-                Text('Remember me',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: ColorConstants.white)),
-              ],
-            );
-          }),
-
-          SizedBox(height: 45.22.h),
-          // Login Button
-          Obx(() {
-            widget.controller.isLoading.value;
-            return PrimaryButton(
-              isLoading: widget.controller.isLoading.value,
-              onPressed: () {
-                widget.controller.login(context);
-              },
-              text: 'Login',
-              size: ButtonSize.large,
-            );
-          }),
-          SizedBox(height: 32.h),
-        ],
+                style: textFieldInputStyle,
+                obscureText: _obscurePassword,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  if (value.length < 6) {
+                    return 'Password must be at least 6 characters';
+                  }
+                  return null;
+                },
+              ),
+            ],
+            SizedBox(height: 28.97.h),
+            //Rmember Me
+            Obx(() {
+              widget.controller.isRememberMe.value;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 16,
+                    width: 16,
+                    child: Checkbox(
+                      visualDensity: VisualDensity.compact,
+                      value: widget.controller.isRememberMe.value,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.r)),
+                      side: BorderSide(width: .6, color: ColorConstants.white),
+                      activeColor: ColorConstants.indigo100,
+                      checkColor: ColorConstants.white,
+                      onChanged: (value) {
+                        widget.controller.onPressRememberMe(value ?? false);
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Text('Remember me',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: ColorConstants.white)),
+                ],
+              );
+            }),
+        
+            SizedBox(height: 45.22.h),
+            // Login Button
+            Obx(() {
+              widget.controller.isLoading.value;
+              return PrimaryButton(
+                isLoading: widget.controller.isLoading.value,
+                onPressed: () {
+                  widget.controller.login(context);
+                },
+                text: 'Login',
+                size: ButtonSize.large,
+              );
+            }),
+            SizedBox(height: 32.h),
+          ],
+        ),
       ),
     );
   }

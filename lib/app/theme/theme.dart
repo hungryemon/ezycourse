@@ -1,6 +1,7 @@
 import 'package:ezycourse/app/helpers/constants/color_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ThemeConfig {
   static ThemeData createTheme({
@@ -92,12 +93,12 @@ class ThemeConfig {
         labelStyle: TextStyle(
           fontFamily: 'Figtree',
           fontWeight: FontWeight.w600,
-          fontSize: 16.0,
+          fontSize: 16.0.sp,
           color: primaryTextColor.withOpacity(0.5),
         ),
         hintStyle: TextStyle(
           color: secondaryTextColor,
-          fontSize: 13.0,
+          fontSize: 13.0.sp,
           fontWeight: FontWeight.w300,
           fontFamily: 'Figtree',
         ),
@@ -106,79 +107,79 @@ class ThemeConfig {
       textTheme: TextTheme(
         displayLarge: baseTextTheme.displayLarge!.copyWith(
           color: primaryTextColor,
-          fontSize: 30.0,
+          fontSize: 30.0.sp,
           fontWeight: FontWeight.bold,
           fontFamily: 'Figtree',
         ),
         displayMedium: baseTextTheme.displayMedium!.copyWith(
           color: primaryTextColor,
-          fontSize: 24,
+          fontSize: 26.sp,
           fontWeight: FontWeight.bold,
           fontFamily: 'Figtree',
         ),
         displaySmall: baseTextTheme.displaySmall!.copyWith(
           color: primaryTextColor,
-          fontSize: 22,
+          fontSize: 22.sp,
           fontWeight: FontWeight.w700,
           fontFamily: 'Figtree',
         ),
         headlineMedium: baseTextTheme.headlineMedium!.copyWith(
           color: primaryTextColor,
-          fontSize: 20,
+          fontSize: 20.sp,
           fontWeight: FontWeight.w700,
           fontFamily: 'Figtree',
         ),
         headlineSmall: baseTextTheme.headlineSmall!.copyWith(
           color: secondaryTextColor,
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w500,
           fontFamily: 'Figtree',
         ),
         titleLarge: baseTextTheme.titleLarge!.copyWith(
           color: primaryTextColor,
-          fontSize: 18,
+          fontSize: 18.sp,
           fontWeight: FontWeight.w600,
           fontFamily: 'Figtree',
         ),
         bodyLarge: baseTextTheme.bodyLarge!.copyWith(
           color: secondaryTextColor,
-          fontSize: 16,
+          fontSize: 16.sp,
           fontWeight: FontWeight.w500,
           fontFamily: 'Figtree',
         ),
         bodyMedium: baseTextTheme.bodyMedium!.copyWith(
           color: captionTextColor,
-          fontSize: 14,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w500,
           fontFamily: 'Figtree',
         ),
         labelLarge: baseTextTheme.labelLarge!.copyWith(
           color: primaryTextColor,
-          fontSize: 14.0,
+          fontSize: 14.0.sp,
           fontWeight: FontWeight.w600,
           fontFamily: 'Figtree',
         ),
         bodySmall: baseTextTheme.bodySmall!.copyWith(
           color: captionTextColor,
-          fontSize: 12.0,
+          fontSize: 12.0.sp,
           fontWeight: FontWeight.w500,
           fontFamily: 'Figtree',
         ),
         labelSmall: baseTextTheme.labelSmall!.copyWith(
             color: overLineTextColor,
-            fontSize: 11.0,
+            fontSize: 11.0.sp,
             fontWeight: FontWeight.w500,
             fontFamily: 'Figtree',
             letterSpacing: 0),
         titleMedium: baseTextTheme.titleMedium!.copyWith(
           color: primaryTextColor,
-          fontSize: 18.0,
+          fontSize: 18.0.sp,
           fontWeight: FontWeight.w400,
           fontFamily: 'Figtree',
         ),
         titleSmall: baseTextTheme.titleSmall!.copyWith(
           color: primaryTextColor,
-          fontSize: 16.0,
+          fontSize: 16.0.sp,
           fontWeight: FontWeight.w400,
           fontFamily: 'Figtree',
         ),

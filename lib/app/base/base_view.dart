@@ -74,7 +74,7 @@ abstract class BaseView<Controller extends BaseController>
         extendBody: true,
         backgroundColor: pageBackgroundColor(context),
         key: globalKey,
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         appBar: appBar(context),
         floatingActionButton: floatingActionButton(context),
         floatingActionButtonLocation: floatingActionButtonLocation,
