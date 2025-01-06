@@ -2,14 +2,18 @@ import 'package:ezycourse/app/helpers/constants/asset_constants.dart';
 import 'package:ezycourse/app/helpers/constants/color_constants.dart';
 import 'package:ezycourse/app/widgets/misc/custom_html_widget.dart';
 import 'package:ezycourse/features/feeds/data/models/feed_response_model.dart';
+import 'package:ezycourse/features/feeds/data/models/reaction_request_model.dart';
+import 'package:ezycourse/features/feeds/data/models/reaction_response_model.dart';
+import 'package:ezycourse/features/feeds/domain/usecases/submit_reaction_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import '../../../../app/helpers/constants/app_constants.dart';
 import '../../../../app/helpers/utils/app_util.dart';
 import '../../../../app/widgets/misc/custom_network_image.dart';
 
-class FeedCard extends StatelessWidget {
+class FeedCard extends StatefulWidget {
   const FeedCard(
       {super.key,
       required this.data,
@@ -22,6 +26,70 @@ class FeedCard extends StatelessWidget {
   final Function(String text) commentsOnTap;
 
   @override
+  State<FeedCard> createState() => _FeedCardState();
+}
+
+class _FeedCardState extends State<FeedCard> {
+  RxBool isUserReacted = false.obs;
+  RxString userReactionType = ''.obs;
+  RxInt reactionCount = 0.obs;
+  RxList<String> likeTypeList = RxList.empty();
+
+  @override
+  void initState() {
+    isUserReacted(widget.data.like != null);
+    userReactionType(widget.data.like?.reactionType ?? '');
+    reactionCount(widget.data.likeCount ?? 0);
+    likeTypeList(widget.data.likeType
+            ?.map((item) => item.reactionType as String)
+            .toList() ??
+        []);
+    super.initState();
+  }
+
+  createOrDeleteReaction(String val, String prevVal) async {
+    try {
+      final SubmitReactionUseCase submitReactionUseCase =
+          Get.find(tag: (SubmitReactionUseCase).toString());
+      ReactionRequest req = ReactionRequest(
+        feedId: widget.data.id ?? 0,
+        action: val.isEmpty ? 'Delete' : 'Create',
+        reactionType:
+            val.isNotEmpty ? val.toUpperCase() : prevVal.toUpperCase(),
+      );
+
+      ReactionResponse response = await submitReactionUseCase.execute(req);
+      reactionCount(response.totalReactions ?? reactionCount.value);
+      likeTypeList(response.likeType
+              ?.map((item) => item.reactionType as String)
+              .toList() ??
+          []);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  _handleOnReactTap({
+    required String newVal,
+    required String prevVal,
+  }) {
+    if (newVal.isEmpty) {
+      isUserReacted(false);
+      userReactionType('');
+      if (prevVal.isNotEmpty) {
+        reactionCount(reactionCount.value - 1);
+      }
+    } else {
+      isUserReacted(true);
+      userReactionType(newVal.toUpperCase());
+      if (prevVal.isEmpty) {
+        reactionCount(reactionCount.value + 1);
+      }
+    }
+    createOrDeleteReaction(newVal, prevVal);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,9 +100,9 @@ class FeedCard extends StatelessWidget {
         const SizedBox(height: 9),
         _buildDescriptionSection(context),
         const SizedBox(height: 16),
-        if (data.files != null &&
-            data.files!.isNotEmpty &&
-            data.fileType == "photos")
+        if (widget.data.files != null &&
+            widget.data.files!.isNotEmpty &&
+            widget.data.fileType == "photos")
           _buildImageSection(),
         const SizedBox(height: 12),
         _buildReactionAndCommentCountSection(context),
@@ -51,7 +119,7 @@ class FeedCard extends StatelessWidget {
     return Row(
       children: [
         CustomNetworkImage(
-          imageUrl: data.pic ?? '',
+          imageUrl: widget.data.pic ?? '',
           height: 34,
           width: 34,
           borderRadius: 20,
@@ -61,13 +129,11 @@ class FeedCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("${data.name}",
+              Text("${widget.data.name}",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: ColorConstants.black110,
                       fontWeight: FontWeight.bold)),
-              Text(
-                  AppUtil.displayTimeAgoFromTimestamp(
-                      data.createdAt),
+              Text(AppUtil.displayTimeAgoFromTimestamp(widget.data.createdAt),
                   style: Theme.of(context)
                       .textTheme
                       .labelLarge
@@ -85,18 +151,18 @@ class FeedCard extends StatelessWidget {
   }
 
   _buildDescriptionSection(context) {
-    return data.isBackground == 1
+    return widget.data.isBackground == 1
         ? Container(
             constraints:
                 const BoxConstraints(minHeight: 160, minWidth: double.infinity),
             padding: const EdgeInsets.symmetric(horizontal: 34, vertical: 28),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              gradient: AppUtil.getGradiant(data.bgColor ?? ""),
+              gradient: AppUtil.getGradiant(widget.data.bgColor ?? ""),
             ),
             child: Center(
               child: CustomHtmlWidget(
-                htmlString: data.feedTxt ?? '',
+                htmlString: widget.data.feedTxt ?? '',
                 textStyle: Theme.of(context)
                     .textTheme
                     .displaySmall
@@ -105,7 +171,7 @@ class FeedCard extends StatelessWidget {
             ),
           )
         : CustomHtmlWidget(
-            htmlString: data.feedTxt ?? '',
+            htmlString: widget.data.feedTxt ?? '',
             textStyle: Theme.of(context)
                 .textTheme
                 .labelLarge
@@ -117,73 +183,83 @@ class FeedCard extends StatelessWidget {
     return CustomNetworkImage(
       width: double.infinity,
       borderRadius: 3.2,
-      imageUrl: data.files?.first.fileLoc ?? "",
+      imageUrl: widget.data.files?.first.fileLoc ?? "",
       fit: BoxFit.cover,
     );
   }
 
-  Row _buildReactionAndCommentCountSection(context) {
-    return Row(
-      children: [
-        if (data.likeType != null && data.likeType!.isNotEmpty)
-          Row(
-            children: data.likeType!
-                .map(
-                  (el) => Align(
-                    widthFactor: .7,
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      padding: const EdgeInsets.all(2),
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.white),
-                      child: Image.asset(
-                        AppUtil.getReactionImage(
-                            reactionType: el.reactionType ?? '',
-                            secondLike: true),
-                        height: 16,
-                        width: 16,
-                        fit: BoxFit.cover,
+  _buildReactionAndCommentCountSection(context) {
+    return Obx(() {
+      likeTypeList;
+      return Row(
+        children: [
+          if (likeTypeList.isNotEmpty)
+            Row(
+              textDirection: TextDirection.rtl,
+              children: likeTypeList
+                  .map(
+                    (el) => Align(
+                      widthFactor: .7,
+                      alignment: Alignment.centerLeft,
+                      
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.white),
+                        child: Image.asset(
+                          AppUtil.getReactionImage(
+                              reactionType: el, secondLike: true),
+                          height: 16,
+                          width: 16,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                )
-                .toList(),
-          ),
-        if (data.likeType != null && data.likeType!.isNotEmpty)
-          const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-              data.like != null
-                  ? 'You and ${data.likeCount} others'
-                  : '${data.likeCount} Reacted',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: ColorConstants.grayDark2,
-                  fontWeight: FontWeight.w700)),
-        ),
-        InkWell(
-          onTap: () => commentsOnTap("${data.id}"),
-          child: Row(
-            children: [
-              SvgPicture.asset(AssetConstants.comment),
-              const SizedBox(width: 8),
-              Text(
-                '${data.commentCount} Comments',
+                  )
+                  .toList(),
+            ),
+          if (likeTypeList.isNotEmpty) const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+                isUserReacted.value && reactionCount > 1
+                    ? 'You and ${reactionCount.value} others'
+                    : isUserReacted.value
+                        ? 'You reacted'
+                        : '${reactionCount.value} Reacted',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: ColorConstants.grayDark2,
-                    fontWeight: FontWeight.w700),
-              ),
-            ],
+                    fontWeight: FontWeight.w700)),
           ),
-        )
-      ],
-    );
+          InkWell(
+            onTap: () => widget.commentsOnTap("${widget.data.id}"),
+            child: Row(
+              children: [
+                SvgPicture.asset(AssetConstants.comment),
+                const SizedBox(width: 8),
+                Text(
+                  '${widget.data.commentCount} Comments',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: ColorConstants.grayDark2,
+                      fontWeight: FontWeight.w700),
+                ),
+              ],
+            ),
+          )
+        ],
+      );
+    });
   }
 
   Row _buildReactAndCommentButtonSection(context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CustomReactionWidget(onReactTap: onReactTap, data: data),
+        CustomReactionWidget(
+            onReactTap: (newVal, prevVal) {
+              _handleOnReactTap(newVal: newVal, prevVal: prevVal);
+              widget.onReactTap(newVal);
+            },
+            data: widget.data),
         Container(
           width: 0.64,
           height: 15.35,
@@ -191,7 +267,7 @@ class FeedCard extends StatelessWidget {
         ),
         InkWell(
           onTap: () {
-            commentsOnTap("${data.id}");
+            widget.commentsOnTap("${widget.data.id}");
           },
           child: Row(
             children: [
@@ -223,7 +299,7 @@ class CustomReactionWidget extends StatefulWidget {
     required this.data,
   });
 
-  final Function(String text) onReactTap;
+  final Function(String newVal, String prevVal) onReactTap;
   final FeedResponse data;
 
   @override
@@ -241,18 +317,20 @@ class _CustomReactionWidgetState extends State<CustomReactionWidget> {
   @override
   Widget build(BuildContext context) {
     return ReactionButton(
-      toggle: _reaction.isNotEmpty,
+      toggle: false,
       direction: ReactionsBoxAlignment.ltr,
       onReactionChanged: (Reaction<String>? reaction) {
-        widget.onReactTap(reaction?.value ?? "");
-        if (_reaction.isNotEmpty) {
+        bool isSameReactionPressed =
+            reaction?.value != null && _reaction == reaction!.value;
+        widget.onReactTap(
+            isSameReactionPressed ? '' : reaction?.value ?? '', _reaction);
+        if (isSameReactionPressed) {
           _reaction = '';
         } else {
-          _reaction = reaction?.value ?? '';
-        }
-        setState(() {
           _reaction = reaction?.value?.toUpperCase() ?? '';
-        });
+        }
+
+        setState(() {});
       },
       reactions: AppConstant.reactionList,
       boxColor: Colors.white,

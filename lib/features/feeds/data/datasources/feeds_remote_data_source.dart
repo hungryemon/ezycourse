@@ -12,11 +12,12 @@ import '../../../../app/base/base_remote_source.dart';
 import '../../../../app/helpers/constants/api_constants.dart';
 import '../../../../core/network/dio_provider.dart';
 import '../models/comment_response_model.dart';
-import '../models/react_request_model.dart';
+import '../models/reaction_request_model.dart';
+import '../models/reaction_response_model.dart';
 
 abstract class FeedsRemoteDataSource {
   Future<List<FeedResponse>> getFeedList(FeedRequest request);
-  Future<BaseResponse> submitReaction(ReactRequest req);
+  Future<ReactionResponse> submitReaction(ReactionRequest req);
   Future<List<CommentResponse>> getCommentList(int id);
   Future<List<ReplyResponse>> getReplyList(int id);
   Future<BaseResponse> createComment(CreateCommentRequest req);
@@ -119,7 +120,7 @@ class FeedsRemoteDataSourceImpl extends BaseRemoteSource
   }
 
   @override
-  Future<BaseResponse> submitReaction(ReactRequest request) {
+  Future<ReactionResponse> submitReaction(ReactionRequest request) {
     var endpoint =
         "${DioProvider.baseUrlSecondary}${ApiList.createLikeUrlWithSecondary}";
     var dioCall = dioClient.post(
@@ -129,10 +130,18 @@ class FeedsRemoteDataSourceImpl extends BaseRemoteSource
 
     try {
       return callApiWithErrorParser(dioCall)
-          .then((response) => _parseBaseResponseResponse(response));
+          .then((response) => _parseReactionListResponse(response));
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<ReactionResponse> _parseReactionListResponse(
+      Response<dynamic> response) async {
+    ReactionResponse replyResponse = await Isolate.run(
+      () =>  ReactionResponse.fromJson(response.data),
+    );
+    return replyResponse;
   }
 
   @override

@@ -8,12 +8,13 @@ import '../../data/models/create_comment_request_model.dart';
 import '../../data/models/create_reply_request_model.dart';
 import '../../data/models/feed_request_model.dart';
 import '../../data/models/feed_response_model.dart';
-import '../../data/models/react_request_model.dart';
+import '../../data/models/reaction_request_model.dart';
+import '../../data/models/reaction_response_model.dart';
 import '../../data/models/reply_response_model.dart';
 
 abstract class FeedsRepository {
   Future<List<FeedResponse>> getFeedList(FeedRequest request);
-  Future<BaseResponse> submitReaction(ReactRequest req);
+  Future<ReactionResponse> submitReaction(ReactionRequest req);
   Future<List<CommentResponse>> getCommentList(int id);
   Future<List<ReplyResponse>> getReplyList(int id);
   Future<BaseResponse> createComment(CreateCommentRequest req);
@@ -50,7 +51,7 @@ class FeedsRepositoryImpl extends BaseRemoteSource implements FeedsRepository {
   }
 
   @override
-  Future<BaseResponse> submitReaction(ReactRequest req) {
+  Future<ReactionResponse> submitReaction(ReactionRequest req) {
     return _remoteSource.submitReaction(req);
   }
 }

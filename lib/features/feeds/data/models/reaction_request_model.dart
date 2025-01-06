@@ -2,17 +2,17 @@ import 'package:dio/dio.dart';
 
 import '../../../../app/helpers/utils/process_object.dart';
 
-class ReactRequest {
+class ReactionRequest {
   final int feedId;
-  final String action;
+  final String action; //Create or Delete
   final String reactionType;
   final String reactionSource;
 
-  ReactRequest({
+  ReactionRequest({
     required this.feedId,
     required this.action,
     required this.reactionType,
-    required this.reactionSource,
+    this.reactionSource = "COMMUNITY",
   });
 
   Map<String, dynamic> toJson() => {
@@ -22,5 +22,5 @@ class ReactRequest {
         "reactionSource": reactionSource,
       };
 
-   FormData toFormData() => processObject(toJson(), isFormData: true);
+  FormData toFormData() => processObject(toJson(), isFormData: true);
 }
