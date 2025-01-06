@@ -142,12 +142,7 @@ class FeedsView extends BaseView<FeedsController> {
               
                   return FeedCard(
                       data: feed,
-                      onReactTap: (val) {
-                          //TODO
-                      },
-                      commentsOnTap: (val) {
-                        //TODO
-                      });
+                      );
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     SizedBox(height: 16.h),

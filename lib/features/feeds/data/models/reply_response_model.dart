@@ -1,9 +1,6 @@
-
 import 'package:ezycourse/features/feeds/data/models/comment_response_model.dart';
 
-
-
-class ReplyResponse  {
+class ReplyResponse {
   final int id;
   final int schoolId;
   final int feedId;
@@ -15,7 +12,7 @@ class ReplyResponse  {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int isAuthorAndAnonymous;
-  final UserModel userEntity;
+  final UserModel user;
 
   const ReplyResponse({
     required this.id,
@@ -29,7 +26,7 @@ class ReplyResponse  {
     required this.createdAt,
     required this.updatedAt,
     required this.isAuthorAndAnonymous,
-    required this.userEntity,
+    required this.user,
   });
 
   factory ReplyResponse.fromJson(Map<String, dynamic> json) => ReplyResponse(
@@ -44,7 +41,7 @@ class ReplyResponse  {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         isAuthorAndAnonymous: json["is_author_and_anonymous"],
-        userEntity: UserModel.fromJson(json["user"]),
+        user: UserModel.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {

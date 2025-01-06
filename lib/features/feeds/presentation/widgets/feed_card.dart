@@ -5,6 +5,7 @@ import 'package:ezycourse/features/feeds/data/models/feed_response_model.dart';
 import 'package:ezycourse/features/feeds/data/models/reaction_request_model.dart';
 import 'package:ezycourse/features/feeds/data/models/reaction_response_model.dart';
 import 'package:ezycourse/features/feeds/domain/usecases/submit_reaction_usecase.dart';
+import 'package:ezycourse/features/feeds/presentation/controllers/comments_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,18 +13,15 @@ import 'package:get/get.dart';
 import '../../../../app/helpers/constants/app_constants.dart';
 import '../../../../app/helpers/utils/app_util.dart';
 import '../../../../app/widgets/misc/custom_network_image.dart';
+import 'comments_bottom_sheet.dart';
 
 class FeedCard extends StatefulWidget {
-  const FeedCard(
-      {super.key,
-      required this.data,
-      required this.onReactTap,
-      required this.commentsOnTap});
+  const FeedCard({
+    super.key,
+    required this.data,
+  });
 
   final FeedResponse data;
-
-  final Function(String text) onReactTap;
-  final Function(String text) commentsOnTap;
 
   @override
   State<FeedCard> createState() => _FeedCardState();
@@ -31,14 +29,12 @@ class FeedCard extends StatefulWidget {
 
 class _FeedCardState extends State<FeedCard> {
   RxBool isUserReacted = false.obs;
-  RxString userReactionType = ''.obs;
   RxInt reactionCount = 0.obs;
   RxList<String> likeTypeList = RxList.empty();
 
   @override
   void initState() {
     isUserReacted(widget.data.like != null);
-    userReactionType(widget.data.like?.reactionType ?? '');
     reactionCount(widget.data.likeCount ?? 0);
     likeTypeList(widget.data.likeType
             ?.map((item) => item.reactionType as String)
@@ -75,18 +71,34 @@ class _FeedCardState extends State<FeedCard> {
   }) {
     if (newVal.isEmpty) {
       isUserReacted(false);
-      userReactionType('');
       if (prevVal.isNotEmpty) {
         reactionCount(reactionCount.value - 1);
       }
     } else {
       isUserReacted(true);
-      userReactionType(newVal.toUpperCase());
       if (prevVal.isEmpty) {
         reactionCount(reactionCount.value + 1);
       }
     }
     createOrDeleteReaction(newVal, prevVal);
+  }
+
+  _handleCommentTap() {
+    Get.lazyReplace(() => CommentsController(
+          reactionCount: reactionCount.value,
+          isUserReacted: isUserReacted.value,
+          likeType: likeTypeList,
+          feedId: widget.data.id ?? 0,
+          feedUserId: widget.data.userId ?? 0,
+        ));
+    showModalBottomSheet<void>(
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context) {
+        return CommentsBottomSheet();
+      },
+    );
   }
 
   @override
@@ -201,7 +213,6 @@ class _FeedCardState extends State<FeedCard> {
                     (el) => Align(
                       widthFactor: .7,
                       alignment: Alignment.centerLeft,
-                      
                       child: Container(
                         padding: const EdgeInsets.all(2),
                         decoration: const BoxDecoration(
@@ -231,7 +242,7 @@ class _FeedCardState extends State<FeedCard> {
                     fontWeight: FontWeight.w700)),
           ),
           InkWell(
-            onTap: () => widget.commentsOnTap("${widget.data.id}"),
+            onTap: _handleCommentTap,
             child: Row(
               children: [
                 SvgPicture.asset(AssetConstants.comment),
@@ -257,7 +268,6 @@ class _FeedCardState extends State<FeedCard> {
         CustomReactionWidget(
             onReactTap: (newVal, prevVal) {
               _handleOnReactTap(newVal: newVal, prevVal: prevVal);
-              widget.onReactTap(newVal);
             },
             data: widget.data),
         Container(
@@ -266,9 +276,7 @@ class _FeedCardState extends State<FeedCard> {
           color: ColorConstants.grayLight,
         ),
         InkWell(
-          onTap: () {
-            widget.commentsOnTap("${widget.data.id}");
-          },
+          onTap: _handleCommentTap,
           child: Row(
             children: [
               Image.asset(

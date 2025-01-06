@@ -1,30 +1,33 @@
+import 'package:ezycourse/features/feeds/data/models/reply_response_model.dart';
+import 'package:get/get.dart';
 
-class CommentResponse{
+class CommentResponse {
+  final int? id;
+  final int? schoolId;
+  final int? feedId;
+  final int? userId;
+  final int? replyCount;
+  final int? likeCount;
+  final String? commentTxt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final UserModel? user;
+  final RxList<ReplyResponse> replies = RxList.empty();
+  CommentResponse(
+      {this.id,
+      this.schoolId,
+      this.feedId,
+      this.userId,
+      this.replyCount,
+      this.likeCount,
+      this.commentTxt,
+      this.createdAt,
+      this.updatedAt,
+      this.user,
+      });
 
-   final int id;
-  final int schoolId;
-  final int feedId;
-  final int userId;
-  final int replyCount;
-  final int likeCount;
-  final String commentTxt;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final UserModel userEntity;
-  const CommentResponse({
-   required this.id,
-      required this.schoolId,
-      required this.feedId,
-      required this.userId,
-      required this.replyCount,
-      required this.likeCount,
-      required this.commentTxt,
-      required this.createdAt,
-      required this.updatedAt,
-      required this.userEntity
-  });
-
-  factory CommentResponse.fromJson(Map<String, dynamic> json) => CommentResponse(
+  factory CommentResponse.fromJson(Map<String, dynamic> json) =>
+      CommentResponse(
         id: json["id"],
         schoolId: json["school_id"],
         feedId: json["feed_id"],
@@ -34,7 +37,8 @@ class CommentResponse{
         commentTxt: json["comment_txt"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        userEntity: UserModel.fromJson(json["user"]),
+        user: UserModel.fromJson(json["user"]),
+       
       );
 
   Map<String, dynamic> toJson() => {
@@ -50,13 +54,13 @@ class CommentResponse{
       };
 }
 
-class UserModel  {
-   final int id;
+class UserModel {
+  final int id;
   final String fullName;
   final String profilePic;
   final String userType;
   const UserModel({
-     required this.id,
+    required this.id,
     required this.fullName,
     required this.profilePic,
     required this.userType,

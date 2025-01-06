@@ -1,6 +1,5 @@
 import 'package:ezycourse/app/helpers/constants/color_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 enum ButtonSize {
   small,

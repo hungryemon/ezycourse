@@ -37,6 +37,7 @@ class ColorConstants {
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color white80 = Color(0xFFF5F5FF);
+  static const Color white60 = Color(0xFFF0F2F5);
   static const Color white20 = Color(0xFFE1E1E1);
 
   static const Color transparent = Color(0x00000000);
