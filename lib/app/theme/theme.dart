@@ -156,13 +156,13 @@ class ThemeConfig {
         labelLarge: baseTextTheme.labelLarge!.copyWith(
           color: primaryTextColor,
           fontSize: 14.0.sp,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w400,
           fontFamily: 'Figtree',
         ),
         bodySmall: baseTextTheme.bodySmall!.copyWith(
           color: captionTextColor,
           fontSize: 12.0.sp,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           fontFamily: 'Figtree',
         ),
         labelSmall: baseTextTheme.labelSmall!.copyWith(

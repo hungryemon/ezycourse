@@ -1,11 +1,14 @@
 import 'package:ezycourse/app/helpers/constants/asset_constants.dart';
+import 'package:ezycourse/features/feeds/presentation/widgets/feed_card.dart';
 import 'package:ezycourse/features/feeds/presentation/widgets/logout_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../../app/base/base_view.dart';
 import '../../../../app/helpers/constants/color_constants.dart';
+import '../../../../app/widgets/misc/paging_view.dart';
 import '../controllers/feeds_controller.dart';
 
 class FeedsView extends BaseView<FeedsController> {
@@ -113,8 +116,39 @@ class FeedsView extends BaseView<FeedsController> {
 
   @override
   Widget body(BuildContext context) {
-    return Center(
-      child: Text('Feeds'),
-    );
+    return Obx(() {
+      return PagingView(
+        onRefresh: () async {
+          controller.initialize();
+        },
+        onLoadNextPage: () {
+          controller.getMoreFeedList(lastFeedId: controller.feedlist.last.id);
+        },
+        isLoading: controller.isFeedPaginationLoading.value,
+        child: Padding(
+         padding: const EdgeInsets.fromLTRB(18, 25, 18, 25),
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: controller.feedlist.length,
+            primary: false,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              var feed = controller.feedlist[index];
+          
+              return FeedCard(
+                  data: feed,
+                  onReactTap: (val) {
+                      //TODO
+                  },
+                  commentsOnTap: (val) {
+                    //TODO
+                  });
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                SizedBox(height: 16.h),
+          ),
+        ),
+      );
+    });
   }
 }

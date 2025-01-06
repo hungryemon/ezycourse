@@ -132,7 +132,7 @@ abstract class BaseView<Controller extends BaseController>
           height: 40,
           width: 40,
           child: CircularProgressIndicator(
-            color: ColorConstants.green100,
+            color: ColorConstants.deepGreen100,
           )),
     );
   }

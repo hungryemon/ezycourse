@@ -14,17 +14,21 @@ class ColorConstants {
   static const Color indigo80 = Color(0xCC6662FF);
   static const Color indigo60 = Color(0xFF5D5BE9);
 
+  static const Color black110 = Color(0xFF040810);
   static const Color black = Color(0xFF000000);
   static const Color black95 = Color(0xFF1A1336);
   static const Color black90 = Color(0xFF101828);
+  static const Color black85 = Color(0xFF1B1B35);
   static const Color black80 = Color(0xFF28243C);
-  static const Color black60 = Color(0x99000000);
+  static const Color black60 = Color(0xFF232A37);
   static const Color black40 = Color(0x66000000);
   static const Color blackOverlay = Color(0x80000000);
   static const Color blackOpac = Color(0x33000000);
 
   static const  Color grayDark = Color(0xFF686868);
+  static const Color grayDark2 = Color(0xFF333741);
   static const Color grayLight = Color(0xFFD0D5DD);
+  static const Color grayLight2 = Color(0xFF667085);
   static const Color dividerColor = Color(0xFFBCBCBC);
 
   static const Color redAccent = Color(0xFFD32F2F);

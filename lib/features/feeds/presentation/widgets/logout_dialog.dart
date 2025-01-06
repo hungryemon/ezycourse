@@ -10,7 +10,7 @@ void showLogoutAlertDialog(BuildContext context,
       barrierDismissible: true,
       builder: (BuildContext context) => Dialog(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
             backgroundColor: Colors.white,
             child: Padding(
               padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 27.h),
@@ -25,7 +25,7 @@ void showLogoutAlertDialog(BuildContext context,
                           color: ColorConstants.black95,
                         ),
                   ),
-                  SizedBox(height: 13.h),
+                  SizedBox(height: 13),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
@@ -38,7 +38,7 @@ void showLogoutAlertDialog(BuildContext context,
                               ),
                     ),
                   ),
-                  SizedBox(height: 34.h),
+                  SizedBox(height: 34),
                   Container(
                     width: double.infinity,
                     height: 1,
