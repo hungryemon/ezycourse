@@ -2,12 +2,12 @@ import 'package:dio/dio.dart';
 
 import '../../../../app/helpers/utils/process_object.dart';
 
-class FeedListRequest {
+class FeedRequest {
   int communityId;
   int spaceId;
   int? more;
 
-  FeedListRequest({
+  FeedRequest({
     this.communityId = 2914,
     this.spaceId = 5883,
     this.more,
@@ -21,4 +21,6 @@ class FeedListRequest {
 
     return processObject(data, isFormData: true);
   }
+
+  
 }

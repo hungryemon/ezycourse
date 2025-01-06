@@ -1,4 +1,3 @@
-import 'package:ezycourse/app/base/base_view.dart';
 import 'package:ezycourse/app/widgets/toast/ezycourse_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,8 +8,9 @@ import '../../../../app/helpers/constants/app_constants.dart';
 import '../../../../app/helpers/constants/color_constants.dart';
 import '../controllers/post_controller.dart';
 
-class PostView extends GetView {
-  final PostController controller = Get.find();
+class PostView extends GetView<PostController> {
+
+  const PostView({super.key});
 
   @override
   Widget build(BuildContext context) {

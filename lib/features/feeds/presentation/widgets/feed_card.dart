@@ -1,7 +1,7 @@
 import 'package:ezycourse/app/helpers/constants/asset_constants.dart';
 import 'package:ezycourse/app/helpers/constants/color_constants.dart';
 import 'package:ezycourse/app/widgets/misc/custom_html_widget.dart';
-import 'package:ezycourse/features/feeds/data/models/feed_list_response_model.dart';
+import 'package:ezycourse/features/feeds/data/models/feed_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:flutter_svg/svg.dart';

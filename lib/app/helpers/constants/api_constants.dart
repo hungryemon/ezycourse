@@ -13,4 +13,7 @@ class ApiList {
   static String createLikeUrlWithSecondary = "/teacher/community/createLike";
   static String createPostUrlWithSecondary =
       "/teacher/community/createFeedWithUpload";
+   static String getCommentsUrlWithSecondary = "/student/comment/getComment/";
+  static String getRepliesUrlWithSecondary = "/student/comment/getReply/";
+  static String createCommentsUrlWithSecondary = "/student/comment/createComment";
 }

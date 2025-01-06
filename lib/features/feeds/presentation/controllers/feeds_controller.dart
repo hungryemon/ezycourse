@@ -1,7 +1,7 @@
 import 'package:ezycourse/app/base/base_controller.dart';
 import 'package:ezycourse/features/auth/data/models/logout_response_model.dart';
-import 'package:ezycourse/features/feeds/data/models/feed_list_request_model.dart';
-import 'package:ezycourse/features/feeds/data/models/feed_list_response_model.dart';
+import 'package:ezycourse/features/feeds/data/models/feed_request_model.dart';
+import 'package:ezycourse/features/feeds/data/models/feed_response_model.dart';
 import 'package:ezycourse/features/feeds/domain/usecases/get_feed_list_usecase.dart';
 import 'package:get/get.dart';
 
@@ -33,7 +33,7 @@ class FeedsController extends BaseController {
 
   void getFeedList() {
     if (isFeedPaginationLoading.value) return;
-    final getFeedListService = _getFeedListUseCase.execute(FeedListRequest());
+    final getFeedListService = _getFeedListUseCase.execute(FeedRequest());
     callDataService(
       getFeedListService,
       hideLoader: false,
@@ -49,7 +49,7 @@ class FeedsController extends BaseController {
     if (isFeedPaginationLoading.value) return;
     isFeedPaginationLoading(true);
     final getMoreFeedListService =
-        _getFeedListUseCase.execute(FeedListRequest(more: lastFeedId));
+        _getFeedListUseCase.execute(FeedRequest(more: lastFeedId));
     callDataService(
       getMoreFeedListService,
       hideLoader: true,
