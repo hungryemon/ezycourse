@@ -1,4 +1,5 @@
 import 'package:ezycourse/app/helpers/constants/asset_constants.dart';
+import 'package:ezycourse/features/feeds/presentation/widgets/create_post_card.dart';
 import 'package:ezycourse/features/feeds/presentation/widgets/feed_card.dart';
 import 'package:ezycourse/features/feeds/presentation/widgets/logout_dialog.dart';
 import 'package:flutter/material.dart';
@@ -127,25 +128,31 @@ class FeedsView extends BaseView<FeedsController> {
         isLoading: controller.isFeedPaginationLoading.value,
         child: Padding(
          padding: const EdgeInsets.fromLTRB(18, 25, 18, 25),
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: controller.feedlist.length,
-            primary: false,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              var feed = controller.feedlist[index];
-          
-              return FeedCard(
-                  data: feed,
-                  onReactTap: (val) {
-                      //TODO
-                  },
-                  commentsOnTap: (val) {
-                    //TODO
-                  });
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-                SizedBox(height: 16.h),
+          child: Column(
+            children: [
+              CreatePostCard(controller: controller),
+              const SizedBox(height: 30,),
+              ListView.separated(
+                shrinkWrap: true,
+                itemCount: controller.feedlist.length,
+                primary: false,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  var feed = controller.feedlist[index];
+              
+                  return FeedCard(
+                      data: feed,
+                      onReactTap: (val) {
+                          //TODO
+                      },
+                      commentsOnTap: (val) {
+                        //TODO
+                      });
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    SizedBox(height: 16.h),
+              ),
+            ],
           ),
         ),
       );

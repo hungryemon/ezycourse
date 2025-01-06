@@ -21,11 +21,11 @@ class ColorConstants {
   static const Color black85 = Color(0xFF1B1B35);
   static const Color black80 = Color(0xFF28243C);
   static const Color black60 = Color(0xFF232A37);
-  static const Color black40 = Color(0x66000000);
+  static const Color black40 = Color(0xFF161A37);
   static const Color blackOverlay = Color(0x80000000);
   static const Color blackOpac = Color(0x33000000);
 
-  static const  Color grayDark = Color(0xFF686868);
+  static const Color grayDark = Color(0xFF686868);
   static const Color grayDark2 = Color(0xFF333741);
   static const Color grayLight = Color(0xFFD0D5DD);
   static const Color grayLight2 = Color(0xFF667085);
@@ -37,6 +37,7 @@ class ColorConstants {
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color white80 = Color(0xFFF5F5FF);
+  static const Color white20 = Color(0xFFE1E1E1);
 
   static const Color transparent = Color(0x00000000);
 

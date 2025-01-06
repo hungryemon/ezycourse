@@ -61,6 +61,7 @@ class AppConstant {
   ];
 
   static List feedBackGroundGradientColors = [
+    "{\"backgroundImage\":\"linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 100%)\"}",
     "{\"backgroundImage\":\"linear-gradient(45deg, rgb(255, 115, 0) 0%, rgb(255, 0, 234) 100%)\"}",
     "{\"backgroundImage\":\"linear-gradient(135deg, rgb(143, 199, 173), rgb(72, 229, 169))\"}",
     "{\"backgroundImage\":\"linear-gradient(135deg, rgb(116, 167, 126), rgb(24, 175, 78))\"}",

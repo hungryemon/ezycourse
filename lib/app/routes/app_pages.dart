@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 
 import '../../features/auth/presentation/bindings/login_binding.dart';
 import '../../features/auth/presentation/views/login_view.dart';
+import '../../features/post/presentation/bindings/post_binding.dart';
+import '../../features/post/presentation/views/post_view.dart';
 import '../../features/splash/bindings/splash_binding.dart';
 import '../../features/splash/views/splash_view.dart';
 
@@ -26,6 +28,12 @@ class AppPages {
       binding: FeedsBinding(),
       page: () => FeedsView(),
       transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.createPost,
+      binding: PostBinding(),
+      page: () => PostView(),
+      transition: Transition.downToUp,
     ),
   ];
 }

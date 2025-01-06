@@ -62,13 +62,12 @@ class FeedCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("${data.name}",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: ColorConstants.black110, fontWeight: FontWeight.bold)),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: ColorConstants.black110,
+                      fontWeight: FontWeight.bold)),
               Text(
                   AppUtil.displayTimeAgoFromTimestamp(
-                      data.createdAt.toString()),
+                      data.createdAt),
                   style: Theme.of(context)
                       .textTheme
                       .labelLarge
@@ -86,7 +85,7 @@ class FeedCard extends StatelessWidget {
   }
 
   _buildDescriptionSection(context) {
-   return data.isBackground == 1
+    return data.isBackground == 1
         ? Container(
             constraints:
                 const BoxConstraints(minHeight: 160, minWidth: double.infinity),
@@ -101,7 +100,7 @@ class FeedCard extends StatelessWidget {
                 textStyle: Theme.of(context)
                     .textTheme
                     .displaySmall
-                    ?.copyWith(color: ColorConstants.white),
+                    ?.copyWith(color: ColorConstants.black),
               ),
             ),
           )
@@ -154,12 +153,12 @@ class FeedCard extends StatelessWidget {
           const SizedBox(width: 12),
         Expanded(
           child: Text(
-            data.like != null
-                ? 'You and ${data.likeCount} others'
-                : '${data.likeCount} Reacted',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: ColorConstants.grayDark2,
-                    fontWeight: FontWeight.w700 )
-          ),
+              data.like != null
+                  ? 'You and ${data.likeCount} others'
+                  : '${data.likeCount} Reacted',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: ColorConstants.grayDark2,
+                  fontWeight: FontWeight.w700)),
         ),
         InkWell(
           onTap: () => commentsOnTap("${data.id}"),
@@ -169,8 +168,9 @@ class FeedCard extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 '${data.commentCount} Comments',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: ColorConstants.grayDark2,
-                    fontWeight: FontWeight.w700 ) ,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: ColorConstants.grayDark2,
+                    fontWeight: FontWeight.w700),
               ),
             ],
           ),
@@ -183,69 +183,113 @@ class FeedCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ReactionButton(
-          toggle: false,
-          direction: ReactionsBoxAlignment.ltr,
-          onReactionChanged: (Reaction<String>? reaction) {
-            onReactTap(reaction?.value ?? "");
-          },
-          reactions: AppConstant.reactionList,
-          boxColor: Colors.white,
-          boxRadius: 30,
-          itemsSpacing: 16,
-          itemSize: const Size(40, 40),
-          boxPadding: const EdgeInsets.all(14),
-          child: Row(
-            children: [
-              Image.asset(
-                data.like != null
-                    ? AppUtil.getReactionImage(
-                        reactionType: data.like?.reactionType ?? '',
-                        secondLike: false)
-                    : AssetConstants.likeMiniFill,
-                height: 20,
-                width: 20,
-                color: data.like != null
-                    ? data.like!.reactionType == 'LIKE'
-                        ? ColorConstants.indigo60
-                        : null
-                    : ColorConstants.grayDark,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                data.like?.reactionType != null &&
-                        data.like!.reactionType!.isNotEmpty
-                    ? AppUtil.capitalizeFirst(data.like!.reactionType!)
-                    : 'Like',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: data.like != null
-                      ? data.like!.reactionType == 'LIKE'
-                          ? ColorConstants.indigo60
-                          : ColorConstants.grayDark
-                      : ColorConstants.grayDark,
-                  fontWeight: FontWeight.w600,)
-              )
-            ],
-          ),
+        CustomReactionWidget(onReactTap: onReactTap, data: data),
+        Container(
+          width: 0.64,
+          height: 15.35,
+          color: ColorConstants.grayLight,
         ),
-        const SizedBox(width: 8),
         InkWell(
           onTap: () {
             commentsOnTap("${data.id}");
           },
           child: Row(
             children: [
-              Image.asset(AssetConstants.commentsFill, height: 20, width: 20,),
+              Image.asset(
+                AssetConstants.commentsFill,
+                height: 20,
+                width: 20,
+              ),
               const SizedBox(width: 4),
               Text(
                 'Comment',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: ColorConstants.black85,
-                  fontWeight: FontWeight.w700,) ,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: ColorConstants.black85,
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
             ],
           ),
         )
       ],
+    );
+  }
+}
+
+class CustomReactionWidget extends StatefulWidget {
+  const CustomReactionWidget({
+    super.key,
+    required this.onReactTap,
+    required this.data,
+  });
+
+  final Function(String text) onReactTap;
+  final FeedResponse data;
+
+  @override
+  State<CustomReactionWidget> createState() => _CustomReactionWidgetState();
+}
+
+class _CustomReactionWidgetState extends State<CustomReactionWidget> {
+  String _reaction = '';
+  @override
+  void initState() {
+    super.initState();
+    _reaction = widget.data.like?.reactionType?.toUpperCase() ?? '';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ReactionButton(
+      toggle: _reaction.isNotEmpty,
+      direction: ReactionsBoxAlignment.ltr,
+      onReactionChanged: (Reaction<String>? reaction) {
+        widget.onReactTap(reaction?.value ?? "");
+        if (_reaction.isNotEmpty) {
+          _reaction = '';
+        } else {
+          _reaction = reaction?.value ?? '';
+        }
+        setState(() {
+          _reaction = reaction?.value?.toUpperCase() ?? '';
+        });
+      },
+      reactions: AppConstant.reactionList,
+      boxColor: Colors.white,
+      boxRadius: 30,
+      itemsSpacing: 16,
+      itemSize: const Size(40, 40),
+      boxPadding: const EdgeInsets.all(14),
+      child: Row(
+        children: [
+          Image.asset(
+            _reaction.isNotEmpty
+                ? AppUtil.getReactionImage(
+                    reactionType: _reaction, secondLike: false)
+                : AssetConstants.likeMiniFill,
+            height: 20,
+            width: 20,
+            color: _reaction.isEmpty
+                ? ColorConstants.grayDark
+                : _reaction == 'LIKE'
+                    ? ColorConstants.indigo60
+                    : null,
+          ),
+          const SizedBox(width: 8),
+          Text(
+              _reaction.isNotEmpty
+                  ? AppUtil.capitalizeFirst(_reaction)
+                  : 'Like',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: _reaction.isEmpty
+                        ? ColorConstants.grayDark
+                        : _reaction == 'LIKE'
+                            ? ColorConstants.indigo60
+                            : ColorConstants.grayDark,
+                    fontWeight: FontWeight.w600,
+                  ))
+        ],
+      ),
     );
   }
 }
