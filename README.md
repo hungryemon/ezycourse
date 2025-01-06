@@ -1,16 +1,65 @@
 # ezycourse
 
-A new Flutter project.
+# Getting Started
 
-## Getting Started
+## Prerequisites
 
-This project is a starting point for a Flutter application.
+Ensure you have the following installed on your development environment:
 
-A few resources to get you started if this is your first Flutter project:
+- [Flutter SDK](https://flutter.dev/docs/get-started/install)
+- Dart (comes with Flutter)
+- Android Studio or Visual Studio Code with Flutter plugins
+- A connected device or emulator for running the app
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Setup
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/hungryemon/ezycourse.git
+   cd ezycourse
+    ```
+2. Get Dependencies:
+  ```bash
+  flutter pub get
+  ```
+### For ios
+  ```bash
+  cd ios
+  ```
+then,
+  ```bash
+  pod install
+  ```
+
+3. Rune the Appp:
+  ```bash
+  flutter run
+  ```
+
+## Project Structure
+```
+|-- lib
+    |-- main.dart
+    |-- main_dev.dart
+    |-- app
+        |-- base
+        |-- bindings
+        |-- flavors
+        |-- helpers
+        |-- routes
+        |-- theme
+        |-- widgets
+        |-- app.dart
+    |-- core
+        |-- network
+        |-- storage
+    |-- features
+        |-- auth
+            |-- data
+            |-- domain
+            |-- presentation
+        |-- feeds
+        |-- post
+        |-- splash
+   
+```
