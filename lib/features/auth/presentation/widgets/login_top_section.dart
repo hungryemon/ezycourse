@@ -13,7 +13,7 @@ class LoginTopSection extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-       SizedBox(height: 140.h,),
+       SizedBox(height: 100.h,),
         Padding(
           padding:  EdgeInsets.symmetric(horizontal: 48.w),
           child: Image.asset(AssetConstants.logo),

@@ -12,7 +12,6 @@ class SharedPrefUtil {
 
 
   static Future<void> setBearerToken(String value) async {
-    debugPrint("TOKEN $value");
     await preferences?.setString(_KEY_BEARER_TOKEN, value);
   }
 
@@ -22,7 +21,6 @@ class SharedPrefUtil {
 
 
   static Future<void> setEmail(String value) async {
-    debugPrint("Email $value");
     await preferences?.setString(_KEY_EMAIL, value);
   }
 
@@ -31,7 +29,6 @@ class SharedPrefUtil {
   }
 
    static Future<void> setPassword(String value) async {
-    debugPrint("Password $value");
     await preferences?.setString(_KEY_PASSWORD, value);
   }
 
